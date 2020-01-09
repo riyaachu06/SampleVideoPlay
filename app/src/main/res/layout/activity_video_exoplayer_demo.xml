@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/black_text"
-        app:controller_layout_id="@layout/exo_playback_control_view"
+        app:controller_layout_id="@layout/customexolayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
