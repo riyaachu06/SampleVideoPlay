@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,7 +15,6 @@ import android.widget.ProgressBar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.samplevideoplay.modelclass.MediaObject;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -49,6 +49,7 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
     private SimpleExoPlayer player;
     private Handler mHandler;
     private Runnable mRunnable;
+    private static int SCREEN_TIME_OUT = 2000;
 
     public static Intent getStartIntent(Context context, String videoUri) {
         Intent intent = new Intent(context, VideoExoplayerDemo.class);
@@ -65,12 +66,30 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
         Intent intent = getIntent();
         videoUri = intent.getStringExtra(KEY_VIDEO_URI);
         init();
+        OntouchTimeout();
         spinnerVideoDetails.getIndeterminateDrawable().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
         //AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (getIntent().hasExtra(KEY_VIDEO_URI)) {
             videoUri = getIntent().getStringExtra(KEY_VIDEO_URI);
         }
         setUp();
+    }
+
+    private void OntouchTimeout() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                videoFullScreenPlayer.setUseController(false);
+                videoFullScreenPlayer.setUseController(true);
+
+            }
+        }, SCREEN_TIME_OUT);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        OntouchTimeout();
+        return super.onTouchEvent(event);
     }
 
     private void setUp() {
