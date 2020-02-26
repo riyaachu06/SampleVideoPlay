@@ -1,11 +1,10 @@
 package com.example.samplevideoplay;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.example.samplevideoplay.adapter.VideoPlayingAdapter;
 import com.example.samplevideoplay.databinding.ActivityMainBinding;
@@ -19,8 +18,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
     ActivityMainBinding activityMainBinding;
     VideoPlayingAdapter videoPlayingAdapter;
-    ArrayList<MediaObject> mediaObjects = new ArrayList<MediaObject>(Arrays.asList(Resources.MEDIA_OBJECTS));
-    private static final String KEY_VIDEO_URI = "video_uri";
+    ArrayList<MediaObject> mediaObjects = new ArrayList<>(Arrays.asList(Resources.MEDIA_OBJECTS));
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +38,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(getApplicationContext(), VideoExoplayerDemo.class);
-        intent.putExtra(KEY_VIDEO_URI, mediaObjects.get(position).getMedia_url());
-        startActivity(intent);
-//        VideoExoplayerDemo.getStartIntent(getApplicationContext(), mediaObjects.get(position).getMedia_url());
+        VideoExoplayerDemo.start(getApplicationContext(), mediaObjects.get(position).getMedia_url());
     }
 }
