@@ -65,13 +65,14 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video_exoplayer_demo);
-        Intent intent = getIntent();
-        videoUri = intent.getStringExtra(KEY_VIDEO_URI);
         init();
+        onTouchTimeout();
         spinnerVideoDetails.getIndeterminateDrawable().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
         //AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (getIntent().hasExtra(KEY_VIDEO_URI)) {
             videoUri = getIntent().getStringExtra(KEY_VIDEO_URI);
+        } else {
+            finish();
         }
         setUp();
     }
@@ -83,6 +84,18 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
         }
         buildMediaSource(Uri.parse(videoUri));
     }
+
+    private void onTouchTimeout() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                videoFullScreenPlayer.setUseController(false);
+                videoFullScreenPlayer.setUseController(true);
+
+            }
+        }, CONTROLLER_TIME_OUT);
+    }
+    private static int CONTROLLER_TIME_OUT = 2000;
 
     private void buildMediaSource(Uri mUri) {
         // Measures bandwidth during playback. Can be null if not required.
