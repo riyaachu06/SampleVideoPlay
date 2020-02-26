@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -41,8 +42,8 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
 
     private static final String KEY_VIDEO_URI = "video_uri";
 
-    PlayerView videoFullScreenPlayer;
-    ProgressBar spinnerVideoDetails;
+    private PlayerView videoFullScreenPlayer;
+    private ProgressBar spinnerVideoDetails;
 
 
     private String videoUri;
@@ -51,10 +52,13 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
     private Runnable mRunnable;
     private static int SCREEN_TIME_OUT = 2000;
 
-    public static Intent getStartIntent(Context context, String videoUri) {
-        Intent intent = new Intent(context, VideoExoplayerDemo.class);
-        intent.putExtra(KEY_VIDEO_URI, videoUri);
-        return intent;
+    public static void start(Context context, String videoUri) {
+        Intent starter = new Intent(context, VideoExoplayerDemo.class);
+        starter.putExtra(KEY_VIDEO_URI, videoUri);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(starter);
     }
 
     @Override
@@ -201,9 +205,7 @@ public class VideoExoplayerDemo extends AppCompatActivity implements Player.Even
             case Player.STATE_ENDED:
                 // Activate the force enable
                 break;
-            case Player.STATE_IDLE:
 
-                break;
             case Player.STATE_READY:
                 if (spinnerVideoDetails != null)
                     spinnerVideoDetails.setVisibility(View.GONE);
